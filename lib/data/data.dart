@@ -19,4 +19,46 @@ List<TaskModel> tasks = [
     description: 'create the home page and configure it with other screens in the same app',
     dateTime: DateTime.now(),
   ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
+  TaskModel(
+    id: 3,
+    title: 'third',
+    description: 'create the home page and configure it with other screens in the same app',
+    dateTime: DateTime.now(),
+  ),
 ];
