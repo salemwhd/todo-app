@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/data/data.dart';
 import 'package:todo_app/views/widget/task_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
-  final TaskModel task = TaskModel(
-    title: 'my new task',
-    description: 'hello, there is my task i am working on it right now',
-    dateTime: DateTime.now(),
-  );
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +13,12 @@ class HomeScreen extends StatelessWidget {
           child: Text('My tasks'),
         ),
       ),
-      body: TaskCard(task: task),
+      body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          return TaskCard(task: tasks[index]);
+        },
+      ),
     );
   }
 }

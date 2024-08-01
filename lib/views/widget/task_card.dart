@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_model.dart';
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends StatefulWidget {
   const TaskCard({super.key, required this.task});
   final TaskModel task;
+
+  @override
+  _TaskCardState createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  late bool isCompleted;
+
+  @override
+  void initState() {
+    super.initState();
+    isCompleted = widget.task.isCompleted ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,26 +37,36 @@ class TaskCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      task.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      widget.task.title,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          decoration:
+                              isCompleted ? TextDecoration.lineThrough : null),
                     ),
                     const SizedBox(
                       height: 4,
                     ),
                     Text(
-                      task.description,
+                      widget.task.description,
                       overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        decoration:
+                            isCompleted ? TextDecoration.lineThrough : null,
+                      ),
                     ),
                   ],
                 ),
               ),
               Checkbox(
-                value: task.isCompleted,
+                value: isCompleted,
                 onChanged: (bool? newValue) {
-                  task.isCompleted = newValue!;
+                  setState(
+                    () {
+                      widget.task.isCompleted = newValue ?? false;
+                      isCompleted = widget.task.isCompleted;
+                    },
+                  );
                 },
               )
             ],
