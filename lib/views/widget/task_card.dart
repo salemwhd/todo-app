@@ -23,6 +23,7 @@ class _TaskCardState extends State<TaskCard> {
     return Container(
       height: 120,
       child: Card(
+        color: Colors.white,
         elevation: 5.0,
         margin: EdgeInsets.all(10.0),
         shape: RoundedRectangleBorder(
@@ -30,45 +31,53 @@ class _TaskCardState extends State<TaskCard> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.task.title,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          decoration:
-                              isCompleted ? TextDecoration.lineThrough : null),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.task.title,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              decoration: isCompleted
+                                  ? TextDecoration.lineThrough
+                                  : null),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          widget.task.description,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            decoration:
+                                isCompleted ? TextDecoration.lineThrough : null,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      widget.task.description,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        decoration:
-                            isCompleted ? TextDecoration.lineThrough : null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Checkbox(
-                value: isCompleted,
-                onChanged: (bool? newValue) {
-                  setState(
-                    () {
-                      widget.task.isCompleted = newValue ?? false;
-                      isCompleted = widget.task.isCompleted;
+                  ),
+                  Checkbox(
+                    value: isCompleted,
+                    onChanged: (bool? newValue) {
+                      setState(
+                        () {
+                          widget.task.isCompleted = newValue ?? false;
+                          isCompleted = widget.task.isCompleted;
+                        },
+                      );
                     },
-                  );
-                },
-              )
+                  )
+                ],
+              ),
+              Text(widget.task.formatDateTime),
             ],
           ),
         ),

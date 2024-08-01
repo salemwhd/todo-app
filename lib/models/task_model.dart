@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class TaskModel {
   final int id;
   final String title;
@@ -9,7 +11,9 @@ class TaskModel {
     required this.id,
     required this.title,
     required this.description,
-    this.isCompleted=false,
     required this.dateTime,
+    this.isCompleted = false,
   });
+
+  String get formatDateTime => DateFormat('dd-MM-yyyy HH:mm').format(dateTime);
 }
