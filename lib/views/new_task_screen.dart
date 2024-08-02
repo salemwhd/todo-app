@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/views/widget/my_text_filed.dart';
 
 class NewTaskScreen extends StatelessWidget {
-  NewTaskScreen({super.key});
+  NewTaskScreen({
+    super.key,
+    this.task,
+  });
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-
+  final TaskModel? task;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('New task'),
+        title: Center(
+          child: task == null ? Text('New task') : Text('Edit'),
         ),
       ),
       body: SingleChildScrollView(
@@ -20,14 +24,16 @@ class NewTaskScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: MyTextFiled(
-                    label: 'Title',
-                    maxLines: 1,
-                    controller: titleController,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: MyTextFiled(
+                      label: 'Title',
+                      maxLines: 1,
+                      controller: titleController,
+                      initialValue: task?.title,
+                    ),
                   ),
-                )),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
@@ -59,6 +65,7 @@ class NewTaskScreen extends StatelessWidget {
                 label: 'Task description...',
                 maxLines: 50,
                 controller: descriptionController,
+                initialValue: task?.description,
               ),
             )
           ],

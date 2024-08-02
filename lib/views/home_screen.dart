@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: tasks.length,
             itemBuilder: (context, index) {
               var task = tasks[index];
+
               return Dismissible(
                 key: ValueKey(tasks[index]),
                 onDismissed: (direction) {

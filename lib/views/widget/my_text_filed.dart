@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
 class MyTextFiled extends StatefulWidget {
+  final String label;
+  final int maxLines;
+  final TextEditingController? controller;
+  final String? initialValue;
   const MyTextFiled({
     super.key,
     required this.label,
     required this.maxLines,
     required this.controller,
+    this.initialValue,
   });
-  final String label;
-  final int maxLines;
-  final TextEditingController? controller;
   @override
   State<MyTextFiled> createState() => _MyTextFiledState();
 }
 
 class _MyTextFiledState extends State<MyTextFiled> {
   late TextEditingController textController;
+
   @override
   void initState() {
     super.initState();
     textController = widget.controller ?? TextEditingController();
+    if (widget.initialValue != null) {
+      textController.text = widget.initialValue!;
+    }
   }
 
   @override
@@ -33,7 +39,7 @@ class _MyTextFiledState extends State<MyTextFiled> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: textController,
       maxLines: widget.maxLines,
       decoration: InputDecoration(
