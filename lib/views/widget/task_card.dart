@@ -19,19 +19,28 @@ class _TaskCardState extends State<TaskCard> {
     isCompleted = widget.task.isCompleted ? true : false;
   }
 
+  void navigateToNewTaskScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewTaskScreen(
+          task: widget.task,
+        ),
+      ),
+    );
+  }
+
+  void checkBoxONChange(bool? newValue) {
+    setState(() {
+      widget.task.isCompleted = newValue ?? false;
+      isCompleted = widget.task.isCompleted;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NewTaskScreen(
-                task: widget.task,
-                
-              ),
-            ));
-      },
+      onTap: navigateToNewTaskScreen,
       child: SizedBox(
         height: 120,
         child: Card(
@@ -79,14 +88,7 @@ class _TaskCardState extends State<TaskCard> {
                     ),
                     Checkbox(
                       value: isCompleted,
-                      onChanged: (bool? newValue) {
-                        setState(
-                          () {
-                            widget.task.isCompleted = newValue ?? false;
-                            isCompleted = widget.task.isCompleted;
-                          },
-                        );
-                      },
+                      onChanged: checkBoxONChange,
                     )
                   ],
                 ),

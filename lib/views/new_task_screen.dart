@@ -10,6 +10,8 @@ class NewTaskScreen extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TaskModel? task;
+
+  void saveTask() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,10 +42,7 @@ class NewTaskScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 32, 71, 62),
                     ),
-                    onPressed: () {
-                      print(
-                          '${titleController.text} \n${descriptionController.text}');
-                    },
+                    onPressed: saveTask,
                     child: const Text(
                       'Save',
                       style: TextStyle(
