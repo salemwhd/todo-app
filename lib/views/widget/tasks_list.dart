@@ -61,7 +61,7 @@ class _TasksListState extends State<TasksList> {
                   setState(() {
                     tasks.removeAt(index);
                   });
-                  widget.onUpdate();
+                 // widget.onUpdate();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Task deleted'),

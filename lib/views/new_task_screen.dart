@@ -1,38 +1,47 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/services/database_service.dart';
 import 'package:todo_app/views/widget/my_text_filed.dart';
 
-class NewTaskScreen extends StatelessWidget {
-  NewTaskScreen({
-    super.key,
-    this.task,
-  }) {
-    if (task != null) {
-      titleController.text = task!.title;
-      descriptionController.text = task!.description;
-    }
-  }
+class NewTaskScreen extends StatefulWidget {
+  final TaskModel? task;
+
+  NewTaskScreen({Key? key, this.task}) : super(key: key);
+
+  @override
+  _NewTaskScreenState createState() => _NewTaskScreenState();
+}
+
+class _NewTaskScreenState extends State<NewTaskScreen> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TaskModel? task;
+  final List<String> categories = ['Personal', 'Work', 'Study'];
+  String selectedCategory = 'Personal';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.task != null) {
+      titleController.text = widget.task!.title;
+      descriptionController.text = widget.task!.description;
+      selectedCategory = widget.task!.category;
+    }
+  }
 
   void navigatetoHomeScreen(BuildContext context) {
     Navigator.of(context).pop(true);
   }
 
-  dynamic saveTask(BuildContext context) {
+  void saveTask(BuildContext context) {
     final title = titleController.text;
     final description = descriptionController.text;
-    if (title.isEmpty || description.isEmpty) {
-      return showDialog(
+    if (title.isEmpty & description.isEmpty) {
+      showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Please fill all fields'),
+            title: const Text('Alert'),
+            content: const Text('Write something to save'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -44,25 +53,24 @@ class NewTaskScreen extends StatelessWidget {
           );
         },
       );
+      return;
     }
-    if (task == null) {
-      TaskModel newTask = TaskModel(
-        title: title,
-        description: description,
-        dateTime: DateTime.now(),
-      );
-      DatabaseService.instance.createTask(newTask);
-      navigatetoHomeScreen(context);
+
+    final TaskModel taskToSave = TaskModel(
+      id: widget.task?.id,
+      title: title,
+      description: description,
+      dateTime: widget.task?.dateTime ?? DateTime.now(),
+      category: selectedCategory,
+    );
+
+    if (widget.task == null) {
+      DatabaseService.instance.createTask(taskToSave);
     } else {
-      TaskModel updatedTask = TaskModel(
-        id: task!.id,
-        title: title,
-        description: description,
-        dateTime: task!.dateTime,
-      );
-      DatabaseService.instance.updateTask(updatedTask);
-      navigatetoHomeScreen(context);
+      DatabaseService.instance.updateTask(taskToSave);
     }
+
+    navigatetoHomeScreen(context);
   }
 
   @override
@@ -70,8 +78,22 @@ class NewTaskScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: task == null ? Text('New task') : Text('Edit'),
+          child: Text(widget.task == null ? 'New task' : 'Edit'),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: IconButton(
+              onPressed: () {
+                saveTask(context);
+              },
+              icon: const Icon(
+                Icons.save,
+                size: 35,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -80,32 +102,31 @@ class NewTaskScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: MyTextFiled(
                       label: 'Title',
                       maxLines: 1,
                       controller: titleController,
-                      initialValue: task?.title,
+                      initialValue: widget.task?.title,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 32, 71, 62),
-                    ),
-                    onPressed: () {
-                      saveTask(context);
+                  padding: const EdgeInsets.all(10.0),
+                  child: DropdownButton<String>(
+                    value: selectedCategory,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedCategory = newValue!;
+                      });
                     },
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    items: categories
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                 ),
               ],
@@ -114,14 +135,14 @@ class NewTaskScreen extends StatelessWidget {
               height: 24,
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: MyTextFiled(
                 label: 'Task description...',
                 maxLines: 50,
                 controller: descriptionController,
-                initialValue: task?.description,
+                initialValue: widget.task?.description,
               ),
-            )
+            ),
           ],
         ),
       ),

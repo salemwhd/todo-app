@@ -10,7 +10,7 @@ class TaskCard extends StatefulWidget {
     required this.onUpdate,
   });
   final TaskModel task;
- final VoidCallback onUpdate;
+  final VoidCallback onUpdate;
 
   @override
   _TaskCardState createState() => _TaskCardState();
@@ -19,6 +19,11 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   late bool isCompleted;
 
+  final Map<String, IconData> categoryIcons = {
+    'Personal': Icons.person,
+    'Work': Icons.work,
+    'Study': Icons.school,
+  };
   @override
   void initState() {
     super.initState();
@@ -32,7 +37,6 @@ class _TaskCardState extends State<TaskCard> {
     });
 
     DatabaseService.instance.updateTask(widget.task);
-    widget.onUpdate();
   }
 
   Future<void> _navigateToNewTaskScreen() async {
@@ -87,14 +91,26 @@ class _TaskCardState extends State<TaskCard> {
                           const SizedBox(
                             height: 4,
                           ),
-                          Text(
-                            widget.task.description,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              decoration: isCompleted
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  categoryIcons[widget.task.category],
+                                  color: Colors.grey,
+                                  size: 20,
+                                ),
+                              ),
+                              Text(
+                                widget.task.description,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  decoration: isCompleted
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

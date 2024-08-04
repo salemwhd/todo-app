@@ -29,9 +29,9 @@ class DatabaseService {
         title TEXT NOT NULL,
         description TEXT NOT NULL,
         dateTime TEXT NOT NULL,
-        isCompleted INTEGER NOT NULL
-      )
-''');
+        isCompleted INTEGER NOT NULL,
+        category TEXT NOT NULL
+      )''');
   }
 
   Future<int> createTask(TaskModel task) async {
