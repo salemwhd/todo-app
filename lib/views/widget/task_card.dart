@@ -4,8 +4,13 @@ import 'package:todo_app/services/database_service.dart';
 import 'package:todo_app/views/new_task_screen.dart';
 
 class TaskCard extends StatefulWidget {
-  const TaskCard({super.key, required this.task});
+  const TaskCard({
+    super.key,
+    required this.task,
+    required this.onUpdate,
+  });
   final TaskModel task;
+ final VoidCallback onUpdate;
 
   @override
   _TaskCardState createState() => _TaskCardState();
@@ -20,17 +25,6 @@ class _TaskCardState extends State<TaskCard> {
     isCompleted = widget.task.isCompleted ? true : false;
   }
 
-  void navigateToNewTaskScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NewTaskScreen(
-          task: widget.task,
-        ),
-      ),
-    );
-  }
-
   void checkBoxONChange(bool? newValue) {
     setState(() {
       widget.task.isCompleted = newValue ?? false;
@@ -38,12 +32,28 @@ class _TaskCardState extends State<TaskCard> {
     });
 
     DatabaseService.instance.updateTask(widget.task);
+    widget.onUpdate();
+  }
+
+  Future<void> _navigateToNewTaskScreen() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewTaskScreen(
+          task: widget.task,
+        ),
+      ),
+    );
+
+    if (result == true) {
+      setState(() {});
+      widget.onUpdate();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: navigateToNewTaskScreen,
+      onTap: _navigateToNewTaskScreen,
       child: SizedBox(
         height: 120,
         child: Card(

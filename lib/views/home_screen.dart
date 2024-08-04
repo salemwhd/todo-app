@@ -13,23 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _needsRefresh = true;
   @override
   void initState() {
     super.initState();
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   Future<void> _navigateToNewTaskScreen() async {
-    final needsRefresh = await Navigator.of(context).push(
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => NewTaskScreen(),
       ),
     );
 
-    if (needsRefresh == true) {
-      setState(() {
-        _needsRefresh = true;
-      });
+    if (result == true) {
+      refresh();
     }
   }
 
@@ -45,15 +46,21 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           TasksList(
             key: UniqueKey(),
+            onUpdate: (){
+              refresh();
+            },
           ),
           Positioned(
             right: 40,
             bottom: 50,
             child: SizedBox(
-              width: 140,
-              height: 70,
-              child: NewTaskButton(onPress: _navigateToNewTaskScreen),
-            ),
+                width: 140,
+                height: 70,
+                child: NewTaskButton(
+                  onPress: () {
+                    return _navigateToNewTaskScreen();
+                  },
+                )),
           ),
         ],
       ),

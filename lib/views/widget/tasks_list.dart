@@ -3,13 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/services/database_service.dart';
-import 'package:todo_app/views/new_task_screen.dart';
 import 'package:todo_app/views/widget/task_card.dart';
 
 class TasksList extends StatefulWidget {
   const TasksList({
     super.key,
+    required this.onUpdate,
   });
+ final VoidCallback onUpdate;
 
   @override
   State<TasksList> createState() => _TasksListState();
@@ -17,7 +18,6 @@ class TasksList extends StatefulWidget {
 
 class _TasksListState extends State<TasksList> {
   late Future<List<TaskModel>> _tasks;
-  bool _needsRefresh = true;
 
   @override
   void initState() {
@@ -25,21 +25,7 @@ class _TasksListState extends State<TasksList> {
     _tasks = DatabaseService.instance.getAllTasks();
   }
 
-  Future<void> _navigateToNewTaskScreen(TaskModel task) async {
-    final needsRefresh = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => NewTaskScreen(
-          task: task,
-        ),
-      ),
-    );
-
-    if (needsRefresh == true) {
-      setState(() {
-        _needsRefresh = true;
-      });
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +63,11 @@ class _TasksListState extends State<TasksList> {
                   setState(() {
                     tasks.removeAt(index);
                   });
+                  widget.onUpdate();
                 },
                 child: TaskCard(
                   task: task,
+                onUpdate: widget.onUpdate,
                 ),
               );
             },
