@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:todo_app/views/new_task_screen.dart';
 import 'package:todo_app/views/widget/new_task_button.dart';
 import 'package:todo_app/views/widget/tasks_list.dart';
@@ -39,14 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
-          child: Text('My tasks'),
+          child: Text(
+            'My tasks',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: Stack(
         children: [
           TasksList(
             key: UniqueKey(),
-            onUpdate: (){
+            onUpdate: () {
               refresh();
             },
           ),

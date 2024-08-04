@@ -58,72 +58,28 @@ class _TaskCardState extends State<TaskCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: _navigateToNewTaskScreen,
-      child: SizedBox(
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          elevation: 5.0,
-          margin: EdgeInsets.all(10.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.task.title,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                decoration: isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : null),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  categoryIcons[widget.task.category],
-                                  color: Colors.grey,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(
-                                widget.task.description,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  decoration: isCompleted
-                                      ? TextDecoration.lineThrough
-                                      : null,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Checkbox(
-                      value: isCompleted,
-                      onChanged: checkBoxONChange,
-                    )
-                  ],
-                ),
-                Text(widget.task.formatDateTime),
-              ],
+      child: Card(
+        elevation: 5,
+        margin: const EdgeInsets.all(8),
+        color: Colors.white,
+        child: ListTile(
+          leading: Icon(categoryIcons[widget.task.category]),
+          title: Text(widget.task.title,
+              style: TextStyle(
+                  decoration: isCompleted ? TextDecoration.lineThrough : null,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)),
+          subtitle: Text(
+            widget.task.description,
+            style: TextStyle(
+              decoration: isCompleted ? TextDecoration.lineThrough : null,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Checkbox(
+            value: isCompleted,
+            onChanged: checkBoxONChange,
           ),
         ),
       ),
