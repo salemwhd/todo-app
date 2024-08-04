@@ -21,7 +21,7 @@ This is a simple To-Do app developed using Flutter and SQLite. The app allows us
 <img src="gifs/new_task_screen.gif" width="250" alt="New task screen">
 
 
-## suggested feature 
+## Suggested feature 
 - **Task Notifier**: Set reminders for tasks, which will notify the user of pending tasks or deadlines.
 
 
