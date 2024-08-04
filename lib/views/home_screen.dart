@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             right: 40,
             bottom: 50,
-            child: SizedBox(
-                width: 140,
+            child: Container(
+                width: 100,
                 height: 70,
                 child: NewTaskButton(onPress: () {
                   return _navigateToNewTaskScreen();

@@ -6,20 +6,21 @@ class NewTaskButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 32, 71, 62).withOpacity(0.7),
+    return SizedBox(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              const Color.fromARGB(255, 32, 71, 62).withOpacity(0.7),
           elevation: 5,
-          overlayColor: Colors.black),
-      onPressed: () {
-        onPress();
-      },
-      child: const Text(
-        'New Task',
-        style: TextStyle(
+          overlayColor: Colors.black,
+        ),
+        onPressed: () {
+          onPress();
+        },
+        child: const Icon(
+          Icons.add,
           color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+          size: 30,
         ),
       ),
     );
