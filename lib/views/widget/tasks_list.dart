@@ -10,7 +10,7 @@ class TasksList extends StatefulWidget {
     super.key,
     required this.onUpdate,
   });
- final VoidCallback onUpdate;
+  final VoidCallback onUpdate;
 
   @override
   State<TasksList> createState() => _TasksListState();
@@ -24,8 +24,6 @@ class _TasksListState extends State<TasksList> {
     super.initState();
     _tasks = DatabaseService.instance.getAllTasks();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +62,16 @@ class _TasksListState extends State<TasksList> {
                     tasks.removeAt(index);
                   });
                   widget.onUpdate();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Task deleted'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 },
                 child: TaskCard(
                   task: task,
-                onUpdate: widget.onUpdate,
+                  onUpdate: widget.onUpdate,
                 ),
               );
             },

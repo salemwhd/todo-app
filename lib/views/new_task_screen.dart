@@ -18,20 +18,34 @@ class NewTaskScreen extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TaskModel? task;
-  
+
   void navigatetoHomeScreen(BuildContext context) {
     Navigator.of(context).pop(true);
   }
 
-  void saveTask(BuildContext context) {
+  dynamic saveTask(BuildContext context) {
     final title = titleController.text;
     final description = descriptionController.text;
     if (title.isEmpty || description.isEmpty) {
-      print('Title and description are required');
-      return;
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Please fill all fields'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
     if (task == null) {
-      print('Creating new task block');
       TaskModel newTask = TaskModel(
         title: title,
         description: description,
@@ -40,7 +54,6 @@ class NewTaskScreen extends StatelessWidget {
       DatabaseService.instance.createTask(newTask);
       navigatetoHomeScreen(context);
     } else {
-      print('Updating task block');
       TaskModel updatedTask = TaskModel(
         id: task!.id,
         title: title,
