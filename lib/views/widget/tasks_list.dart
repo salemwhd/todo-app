@@ -1,57 +1,90 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
-import 'package:todo_app/data/data.dart';
+import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/services/database_service.dart';
+import 'package:todo_app/views/new_task_screen.dart';
 import 'package:todo_app/views/widget/task_card.dart';
 
 class TasksList extends StatefulWidget {
-  const TasksList({super.key});
+  const TasksList({
+    super.key,
+  });
 
   @override
   State<TasksList> createState() => _TasksListState();
 }
 
 class _TasksListState extends State<TasksList> {
+  late Future<List<TaskModel>> _tasks;
+  bool _needsRefresh = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _tasks = DatabaseService.instance.getAllTasks();
+  }
+
+  Future<void> _navigateToNewTaskScreen(TaskModel task) async {
+    final needsRefresh = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewTaskScreen(
+          task: task,
+        ),
+      ),
+    );
+
+    if (needsRefresh == true) {
+      setState(() {
+        _needsRefresh = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: (context, index) {
-        var task = tasks[index];
-        return Dismissible(
-          key: ValueKey(tasks[index]),
-          onDismissed: (direction) {
-            setState(() {
-              tasks.removeAt(index);
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                duration: Duration(seconds: 3),
-                content: Text('${task.title} Deleted'),
-                action: SnackBarAction(
-                    label: 'Undo',
-                    onPressed: () {
-                      setState(() {
-                        tasks.insert(index, task);
-                      });
-                    }),
-              ),
-            );
-          },
-          background: Container(
-            alignment: Alignment.centerLeft,
-            color: Colors.red,
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Icon(Icons.delete),
-                  Spacer(),
-                  Icon(Icons.delete),
-                ],
-              ),
-            ),
-          ),
-          child: TaskCard(task: tasks[index]),
-        );
+    return FutureBuilder<List<TaskModel>>(
+      future: _tasks,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No tasks available'));
+        } else {
+          final tasks = snapshot.data!;
+          return ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              var task = tasks[index];
+              return Dismissible(
+                key: ValueKey(task.id),
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.all(16),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.delete, color: Colors.white),
+                      Spacer(),
+                      Icon(Icons.delete, color: Colors.white),
+                    ],
+                  ),
+                ),
+                onDismissed: (direction) {
+                  DatabaseService.instance.deleteTask(task.id!);
+                  setState(() {
+                    tasks.removeAt(index);
+                  });
+                },
+                child: TaskCard(
+                  task: task,
+                ),
+              );
+            },
+          );
+        }
       },
     );
   }

@@ -1,17 +1,57 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/services/database_service.dart';
 import 'package:todo_app/views/widget/my_text_filed.dart';
 
 class NewTaskScreen extends StatelessWidget {
   NewTaskScreen({
     super.key,
     this.task,
-  });
+  }) {
+    if (task != null) {
+      titleController.text = task!.title;
+      descriptionController.text = task!.description;
+    }
+  }
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TaskModel? task;
+  
+  void navigatetoHomeScreen(BuildContext context) {
+    Navigator.of(context).pop(true);
+  }
 
-  void saveTask() {}
+  void saveTask(BuildContext context) {
+    final title = titleController.text;
+    final description = descriptionController.text;
+    if (title.isEmpty || description.isEmpty) {
+      print('Title and description are required');
+      return;
+    }
+    if (task == null) {
+      print('Creating new task block');
+      TaskModel newTask = TaskModel(
+        title: title,
+        description: description,
+        dateTime: DateTime.now(),
+      );
+      DatabaseService.instance.createTask(newTask);
+      navigatetoHomeScreen(context);
+    } else {
+      print('Updating task block');
+      TaskModel updatedTask = TaskModel(
+        id: task!.id,
+        title: title,
+        description: description,
+        dateTime: task!.dateTime,
+      );
+      DatabaseService.instance.updateTask(updatedTask);
+      navigatetoHomeScreen(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +82,9 @@ class NewTaskScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 32, 71, 62),
                     ),
-                    onPressed: saveTask,
+                    onPressed: () {
+                      saveTask(context);
+                    },
                     child: const Text(
                       'Save',
                       style: TextStyle(

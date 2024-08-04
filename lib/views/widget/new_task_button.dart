@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/views/new_task_screen.dart';
 
 class NewTaskButton extends StatelessWidget {
-  const NewTaskButton({super.key});
-
-  void navigateToNewTaskScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NewTaskScreen(),
-      ),
-    );
-  }
+  const NewTaskButton({super.key, required this.onPress});
+  final Future<void> Function() onPress;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +12,15 @@ class NewTaskButton extends StatelessWidget {
           elevation: 5,
           overlayColor: Colors.black),
       onPressed: () {
-        navigateToNewTaskScreen(context);
+        onPress();
       },
       child: const Text(
         'New Task',
         style: TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

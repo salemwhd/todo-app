@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/views/home_screen.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 void main() {
+  sqfliteFfiInit();
   runApp(const MyApp());
 }
 

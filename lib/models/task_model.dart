@@ -23,7 +23,7 @@ class TaskModel {
       'title': title,
       'description': description,
       'dateTime': dateTime.toIso8601String(),
-      'isCompleted': isCompleted ? 1 : 0,
+      'isCompleted': isCompleted ? 0 : 1,
     };
   }
 
@@ -33,7 +33,7 @@ class TaskModel {
       title: map['title'],
       description: map['description'],
       dateTime: DateTime.parse(map['dateTime']),
-      isCompleted: map['isCompleted'] == 1, // Convert int to bool
+      isCompleted: map['isCompleted'] == 0,
     );
   }
 }

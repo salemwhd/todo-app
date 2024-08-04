@@ -1,5 +1,6 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:todo_app/models/task_model.dart';
 
 class DatabaseService {
@@ -10,18 +11,20 @@ class DatabaseService {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initialDb('tasks.db');
+    _database = await _initDatabase();
     return _database!;
   }
 
-  Future<Database> _initialDb(String filePath) async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+  _initDatabase() async {
+    var documentsDirectory = await getApplicationDocumentsDirectory();
+
+    String path = join(documentsDirectory.path, 'tasks.db');
+    var db = await openDatabase(path, version: 1, onCreate: _createDB);
+    return db;
   }
 
-  Future<void> _createDB(Database db, int versoin) async {
-    await db.execute('''CREATE TABLE tasks(
+  Future<void> _createDB(Database db, int version) async {
+    await db.execute('''CREATE TABLE IF NOT EXISTS tasks(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         description TEXT NOT NULL,
@@ -55,6 +58,7 @@ class DatabaseService {
     final result = await db.query('tasks');
     return result.map((map) => TaskModel.fromMap(map)).toList();
   }
+
   Future<int> updateTask(TaskModel task) async {
     final db = await instance.database;
     return await db.update(
@@ -64,7 +68,8 @@ class DatabaseService {
       whereArgs: [task.id],
     );
   }
- Future<int> deleteTask(int id) async {
+
+  Future<int> deleteTask(int id) async {
     final db = await instance.database;
     return await db.delete(
       'tasks',
@@ -73,5 +78,8 @@ class DatabaseService {
     );
   }
 
-
+  Future<void> closeDatabase() async {
+    final db = await instance.database;
+    await db.close();
+  }
 }

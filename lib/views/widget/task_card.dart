@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/services/database_service.dart';
 import 'package:todo_app/views/new_task_screen.dart';
 
 class TaskCard extends StatefulWidget {
@@ -35,6 +36,8 @@ class _TaskCardState extends State<TaskCard> {
       widget.task.isCompleted = newValue ?? false;
       isCompleted = widget.task.isCompleted;
     });
+
+    DatabaseService.instance.updateTask(widget.task);
   }
 
   @override

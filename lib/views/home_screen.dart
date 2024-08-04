@@ -1,6 +1,7 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
-import 'package:todo_app/data/data.dart';
-import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/views/new_task_screen.dart';
 import 'package:todo_app/views/widget/new_task_button.dart';
 import 'package:todo_app/views/widget/tasks_list.dart';
 
@@ -12,11 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<TaskModel> mytasks = tasks;
-
+  bool _needsRefresh = true;
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _navigateToNewTaskScreen() async {
+    final needsRefresh = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewTaskScreen(),
+      ),
+    );
+
+    if (needsRefresh == true) {
+      setState(() {
+        _needsRefresh = true;
+      });
+    }
   }
 
   @override
@@ -27,16 +41,18 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text('My tasks'),
         ),
       ),
-      body: const Stack(
+      body: Stack(
         children: [
-          TasksList(),
+          TasksList(
+            key: UniqueKey(),
+          ),
           Positioned(
             right: 40,
             bottom: 50,
             child: SizedBox(
               width: 140,
               height: 70,
-              child: NewTaskButton(),
+              child: NewTaskButton(onPress: _navigateToNewTaskScreen),
             ),
           ),
         ],
