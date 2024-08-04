@@ -1,16 +1,27 @@
-# todo_app
+# To-Do App
 
-A new Flutter project.
+## Overview
 
-## Getting Started
+This is a simple To-Do app developed using Flutter and SQLite. The app allows users to manage their tasks effectively with features such as adding, updating, deleting tasks, and reordering tasks. It provides an intuitive interface for managing tasks with drag-and-drop functionality and swipe gestures.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- **Add Tasks**: Create new tasks through a dedicated screen for adding or editing tasks.
+- **Update Tasks**: Edit existing tasks using the same screen used for adding tasks.
+- **Delete Tasks**: Remove tasks either by swiping left or right on the task.
+- **Reorder Tasks**: Rearrange tasks by dragging and dropping them to your preferred order.
+- **Categorize Tasks**: Choose a category for every task which it's icon appears in the task card.  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screens
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Task Display Screen**: Shows a list of all tasks with options to reorder and delete.
+![Task Display Screen](gifs/home_screen.gif)
+
+
+- **Add/Edit Task Screen**: Provides a form to add new tasks or edit existing ones.
+- ![Add/Edit Task Screen](gifs/new_task_screen.gif)
+
+## Technologies Used
+
+- **Flutter**: For building the mobile app interface and functionality.
+- **SQLite**: For local database management and storing tasks.
