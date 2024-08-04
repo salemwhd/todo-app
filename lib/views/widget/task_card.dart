@@ -63,19 +63,33 @@ class _TaskCardState extends State<TaskCard> {
         margin: const EdgeInsets.all(8),
         color: Colors.white,
         child: ListTile(
-          leading: Icon(categoryIcons[widget.task.category]),
+          leading: Icon(
+            categoryIcons[widget.task.category],
+            color: Colors.blueGrey,
+          ),
           title: Text(widget.task.title,
               style: TextStyle(
                   decoration: isCompleted ? TextDecoration.lineThrough : null,
                   fontSize: 18,
                   fontWeight: FontWeight.bold)),
-          subtitle: Text(
-            widget.task.description,
-            style: TextStyle(
-              decoration: isCompleted ? TextDecoration.lineThrough : null,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.task.description,
+                style: TextStyle(
+                  decoration: isCompleted ? TextDecoration.lineThrough : null,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  widget.task.formatDateTime,
+                ),
+              ),
+            ],
           ),
           trailing: Checkbox(
             value: isCompleted,

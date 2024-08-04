@@ -37,6 +37,29 @@ class _TasksListState extends State<TasksList> {
     _tasks = Future.value(tasks);
   }
 
+  void onDismissed(
+      DismissDirection direction, TaskModel task, List<TaskModel> tasks) {
+    DatabaseService.instance.deleteTask(task.id!);
+    setState(() {
+      tasks.remove(task);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Task deleted'),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: 'UNDO',
+          onPressed: () {
+            DatabaseService.instance.createTask(task);
+            setState(() {
+              tasks.insert(tasks.indexOf(task), task);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<TaskModel>>(
@@ -69,6 +92,7 @@ class _TasksListState extends State<TasksList> {
                     ),
                   ),
                   onDismissed: (direction) {
+                    var taskIndex = tasks.indexOf(task);
                     DatabaseService.instance.deleteTask(task.id!);
                     setState(() {
                       tasks.remove(task);
@@ -82,7 +106,7 @@ class _TasksListState extends State<TasksList> {
                           onPressed: () {
                             DatabaseService.instance.createTask(task);
                             setState(() {
-                              tasks.insert(tasks.indexOf(task), task);
+                              tasks.insert(taskIndex, task);
                             });
                           },
                         ),

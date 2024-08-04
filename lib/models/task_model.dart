@@ -16,7 +16,7 @@ class TaskModel {
     required this.category,
   });
 
-  String get formatDateTime => DateFormat('dd-MM-yyyy HH:mm').format(dateTime);
+  String get formatDateTime => DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
 
   Map<String, dynamic> toMap() {
     return {
