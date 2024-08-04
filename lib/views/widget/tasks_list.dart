@@ -25,6 +25,18 @@ class _TasksListState extends State<TasksList> {
     _tasks = DatabaseService.instance.getAllTasks();
   }
 
+  void _onReorder(int oldIndex, int newIndex) async {
+    List<TaskModel> tasks = await _tasks;
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final task = tasks.removeAt(oldIndex);
+      tasks.insert(newIndex, task);
+    });
+    _tasks = Future.value(tasks);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<TaskModel>>(
@@ -38,53 +50,51 @@ class _TasksListState extends State<TasksList> {
           return const Center(child: Text('No tasks available'));
         } else {
           final tasks = snapshot.data!;
-          return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              var task = tasks[index];
-              return Dismissible(
-                key: ValueKey(task.id),
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.all(16),
-                  child: const Row(
-                    children: [
-                      Icon(Icons.delete, color: Colors.white),
-                      Spacer(),
-                      Icon(Icons.delete, color: Colors.white),
-                    ],
+          return ReorderableListView(
+            onReorder: _onReorder,
+            children: [
+              for (final task in tasks)
+                Dismissible(
+                  key: ValueKey(task.id),
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.all(16),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.delete, color: Colors.white),
+                        Spacer(),
+                        Icon(Icons.delete, color: Colors.white),
+                      ],
+                    ),
+                  ),
+                  onDismissed: (direction) {
+                    DatabaseService.instance.deleteTask(task.id!);
+                    setState(() {
+                      tasks.remove(task);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Task deleted'),
+                        duration: const Duration(seconds: 3),
+                        action: SnackBarAction(
+                          label: 'UNDO',
+                          onPressed: () {
+                            DatabaseService.instance.createTask(task);
+                            setState(() {
+                              tasks.insert(tasks.indexOf(task), task);
+                            });
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  child: TaskCard(
+                    task: task,
+                    onUpdate: widget.onUpdate,
                   ),
                 ),
-                onDismissed: (direction) {
-                  DatabaseService.instance.deleteTask(task.id!);
-                  setState(() {
-                    tasks.removeAt(index);
-                  });
-                 // widget.onUpdate();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(
-                      content: const Text('Task deleted'),
-                      duration: const Duration(seconds: 3),
-                      action: SnackBarAction(
-                        label: 'UNDO',
-                        onPressed: () {
-                          DatabaseService.instance.createTask(task);
-                          setState(() {
-                            tasks.insert(index, task);
-                          });
-                          //widget.onUpdate();
-                        },
-                      ),
-                    ),
-                  );
-                },
-                child: TaskCard(
-                  task: task,
-                  onUpdate: widget.onUpdate,
-                ),
-              );
-            },
+            ],
           );
         }
       },
