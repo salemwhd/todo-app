@@ -63,9 +63,19 @@ class _TasksListState extends State<TasksList> {
                   });
                  // widget.onUpdate();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Task deleted'),
-                      duration: Duration(seconds: 2),
+                     SnackBar(
+                      content: const Text('Task deleted'),
+                      duration: const Duration(seconds: 3),
+                      action: SnackBarAction(
+                        label: 'UNDO',
+                        onPressed: () {
+                          DatabaseService.instance.createTask(task);
+                          setState(() {
+                            tasks.insert(index, task);
+                          });
+                          //widget.onUpdate();
+                        },
+                      ),
                     ),
                   );
                 },
