@@ -15,11 +15,16 @@ This is a simple To-Do app developed using Flutter and SQLite. The app allows us
 ## Screens
 
 - **Task Display Screen**: Shows a list of all tasks with options to reorder and delete.
-![Task Display Screen](gifs/home_screen.gif)
-
+<img src="gifs/home_screen.gif" width="300" alt="Home screen">
 
 - **Add/Edit Task Screen**: Provides a form to add new tasks or edit existing ones.
-- ![Add/Edit Task Screen](gifs/new_task_screen.gif)
+<img src="gifs/new_task_screen.gif" width="300" alt="New task screen">
+
+
+## suggested feature 
+- **Task Notifier**: Set reminders for tasks, which will notify the user of pending tasks or deadlines.
+
+
 
 ## Technologies Used
 
