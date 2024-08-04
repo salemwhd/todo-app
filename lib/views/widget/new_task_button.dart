@@ -8,7 +8,7 @@ class NewTaskButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 32, 71, 62),
+          backgroundColor: Color.fromARGB(255, 32, 71, 62).withOpacity(0.7),
           elevation: 5,
           overlayColor: Colors.black),
       onPressed: () {
