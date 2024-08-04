@@ -12,7 +12,7 @@ This is a simple To-Do app developed using Flutter and SQLite. The app allows us
 - **Reorder Tasks**: Rearrange tasks by dragging and dropping them to your preferred order.
 - **Categorize Tasks**: Choose a category for every task which it's icon appears in the task card.  
 
-## Screens
+## Demo
 
 - **Task Display Screen**: Shows a list of all tasks with options to reorder and delete.
 <img src="gifs/home_screen.gif" width="250" alt="Home screen">
